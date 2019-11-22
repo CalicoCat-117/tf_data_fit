@@ -21,8 +21,6 @@ for file_name in data_file:
   data = pd.read_csv(file_name, header=None)
   df = pd.DataFrame(data)
   df.fillna(value=0)
-  df = df[df[0] > 2.850]
-  df = df[df[0] < 2.890]
   X = df[0].values
   Y = df[1].values
   
@@ -34,7 +32,7 @@ for file_name in data_file:
   fitmodel = model.Model()
   
   ''' Train the model '''
-  optimizer = tf.keras.optimizers.Adam()
+  optimizer = tf.keras.optimizers.Adam(lr=0.01)
   train_loss = tf.keras.metrics.Mean(name='train_loss')
   train_accuracy = tf.keras.metrics.Mean(name='train_accuracy')
   test_loss = tf.keras.metrics.Mean(name='test_loss')
@@ -59,13 +57,12 @@ for file_name in data_file:
     test_accuracy(Y, predictions)
     return
   
-  EPOCHS = 1000
+  EPOCHS = 5000
   for epoch in range(EPOCHS):
     # shuffle
     permutation = np.random.permutation(len(X))
     Xi = X[permutation]
     Yi = Y[permutation]
-    # Y = Y / np.max(Y)
     # split
     split_num = int(len(X) * 0.9)
     # Train
@@ -91,8 +88,9 @@ for file_name in data_file:
     train_accuracy.reset_states()
     test_loss.reset_states()
     test_accuracy.reset_states()
+  
   ''' Saving result '''
-  result = pd.DataFrame([fitmodel.R0.numpy()[0], fitmodel.f0.numpy()[0], fitmodel.dw.numpy()[0], fitmodel.Rm.numpy(), fitmodel.bg.numpy()])
+  result = pd.DataFrame([fitmodel.R0.numpy()[0], fitmodel.f0.numpy(), fitmodel.dw.numpy()[0], fitmodel.Rm.numpy(), fitmodel.bg.numpy()])
   result.to_csv(os.path.join("./result", filename + ".csv"))
   ''' Draw fitting results '''
   plt.scatter(X, Y, c='b')

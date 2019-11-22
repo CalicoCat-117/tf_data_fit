@@ -1,12 +1,14 @@
 import tensorflow as tf
 import numpy as np
 import pdb
+
 class Model(tf.keras.Model):
   def __init__(self):
-    super(Model, self).__init__()
+    super(tf.keras.Model, self).__init__()
     ''' initialize_all_variables'''
     self.R0 = tf.Variable(np.float32(np.random.uniform(0.5, 0.97, 1)))
     self.f0 = tf.Variable(np.float32(np.random.uniform(2850, 2890, 1)))
+    # self.f0 = tf.Variable(np.float32(2871))
     self.dw = tf.Variable(np.float32(np.random.uniform(2, 20, 1)))
     self.Rm = tf.Variable(np.float32(1.0))
     self.bg = tf.Variable(np.float32(0))
@@ -27,3 +29,4 @@ class Model(tf.keras.Model):
   @staticmethod
   def accuracy(predicted_y, true_y):
     return tf.reduce_mean(tf.square(predicted_y - true_y))
+
