@@ -13,3 +13,11 @@ pandas 0.25.3
 python fit.py
 ```
 
+#### TODO
+
+- [x] epoch to steps
+- [x] n particle model
+- [ ] simulation data
+- [ ] config file
+- [ ] heuristic algorithm
+

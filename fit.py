@@ -30,7 +30,8 @@ for file_name in data_file:
   Y = Y / np.max(Y)
   Y = Y.astype(np.float32)
   ''' Build the model '''
-  fitmodel = model.Model()
+  particle_num = 3
+  fitmodel = model.Model(particle_num)
   
   ''' Train the model '''
   optimizer = tf.keras.optimizers.Adam(lr=0.01)
@@ -58,7 +59,8 @@ for file_name in data_file:
     test_accuracy(Y, predictions)
     return
   
-  EPOCHS = 4000
+  EPOCHS = 10
+  steps_per_epoch = 500
   for epoch in range(EPOCHS):
     # shuffle
     permutation = np.random.permutation(len(X))
@@ -69,13 +71,22 @@ for file_name in data_file:
     # Train
     X_train = Xi[:split_num]
     Y_train = Yi[:split_num]
+    train_ds = tf.data.Dataset.from_tensor_slices((X_train, Y_train)).repeat(steps_per_epoch).batch(len(X_train))
     # Test
     X_test = Xi[split_num:]
     Y_test = Yi[split_num:]
     
-    train_step(X_train, Y_train)
-    test_step(X_test, Y_test)
-
+    
+    # test_ds = tf.data.Dataset.from_tensor_slices((X_test, Y_test)).repeat(steps_per_epoch).batch(len(X_test))
+    # for x_ds, y_ds in train_ds:
+    #   train_step(x_ds, y_ds)
+    # for x_ds, y_ds in test_ds:
+    #   test_step(x_ds, y_ds)
+    
+    for step in range(steps_per_epoch):
+      train_step(X_train, Y_train)
+      test_step(X_test, Y_test)
+    
     template = 'Epoch {}, Loss: {}, Accuracy: {}, Test Loss: {}, Test Accuracy: {}'
     print(template.format(epoch+1,
                           train_loss.result(),
@@ -89,10 +100,17 @@ for file_name in data_file:
     train_accuracy.reset_states()
     test_loss.reset_states()
     test_accuracy.reset_states()
+  
   stop = time()
-  print("time :" + str(stop-start) + "s")
+  print("Time consumed :" + str(stop-start) + "s")
   ''' Saving result '''
-  result = pd.DataFrame([fitmodel.R0.numpy()[0], fitmodel.f0.numpy(), fitmodel.dw.numpy()[0], fitmodel.Rm.numpy(), fitmodel.bg.numpy()])
+  parameters = []
+  for i in range(particle_num):
+    parameters.append([fitmodel.R0[i].numpy()[0], 
+                       fitmodel.f0[i].numpy()[0], 
+                       fitmodel.dw[i].numpy()[0], 
+                       np.max(df[1].values) * fitmodel.Rm[i].numpy()])
+  result = pd.DataFrame(parameters, columns=["R0", "f0", "dw", "Rm"])
   result.to_csv(os.path.join("./result", filename + ".csv"))
   ''' Draw fitting results '''
   plt.scatter(X, Y, c='b')
