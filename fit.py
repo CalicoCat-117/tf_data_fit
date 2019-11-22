@@ -6,13 +6,14 @@ import glob
 import pandas as pd
 import pdb
 import model
-
+from time import time
 
 data_file = glob.glob("./data/*.txt") + glob.glob("./data/*.csv")
 
 
 
 for file_name in data_file:
+  start = time()
   print(file_name)
   filepath, tempfilename = os.path.split(file_name)
   filename, extension = os.path.splitext(tempfilename)
@@ -57,7 +58,7 @@ for file_name in data_file:
     test_accuracy(Y, predictions)
     return
   
-  EPOCHS = 5000
+  EPOCHS = 4000
   for epoch in range(EPOCHS):
     # shuffle
     permutation = np.random.permutation(len(X))
@@ -88,7 +89,8 @@ for file_name in data_file:
     train_accuracy.reset_states()
     test_loss.reset_states()
     test_accuracy.reset_states()
-  
+  stop = time()
+  print("time :" + str(stop-start) + "s")
   ''' Saving result '''
   result = pd.DataFrame([fitmodel.R0.numpy()[0], fitmodel.f0.numpy(), fitmodel.dw.numpy()[0], fitmodel.Rm.numpy(), fitmodel.bg.numpy()])
   result.to_csv(os.path.join("./result", filename + ".csv"))
