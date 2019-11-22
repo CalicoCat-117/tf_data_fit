@@ -30,7 +30,7 @@ for file_name in data_file:
   Y = Y / np.max(Y)
   Y = Y.astype(np.float32)
   ''' Build the model '''
-  particle_num = 3
+  particle_num = 1
   fitmodel = model.Model(particle_num)
   
   ''' Train the model '''
@@ -109,8 +109,9 @@ for file_name in data_file:
     parameters.append([fitmodel.R0[i].numpy()[0], 
                        fitmodel.f0[i].numpy()[0], 
                        fitmodel.dw[i].numpy()[0], 
-                       np.max(df[1].values) * fitmodel.Rm[i].numpy()])
-  result = pd.DataFrame(parameters, columns=["R0", "f0", "dw", "Rm"])
+                       np.max(df[1].values) * fitmodel.Rm[i].numpy(),
+                       np.max(df[1].values) * fitmodel.bg.numpy()])
+  result = pd.DataFrame(parameters, columns=["R0", "f0", "dw", "Rm", "bg"])
   result.to_csv(os.path.join("./result", filename + ".csv"))
   ''' Draw fitting results '''
   plt.scatter(X, Y, c='b')

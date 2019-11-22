@@ -13,6 +13,10 @@ pandas 0.25.3
 python fit.py
 ```
 
+#### Result
+
+![](./Figure_1.png)
+
 #### TODO
 
 - [x] epoch to steps
@@ -20,4 +24,3 @@ python fit.py
 - [ ] simulation data
 - [ ] config file
 - [ ] heuristic algorithm
-
