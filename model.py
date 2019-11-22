@@ -14,7 +14,7 @@ class Model(tf.keras.Model):
     
     for _ in range(particle_num):
       self.R0.append(tf.Variable(np.float32(np.random.uniform(0.5, 0.97, 1))))
-      self.f0.append(tf.Variable(np.float32(np.random.uniform(2800, 3200, 1))))
+      self.f0.append(tf.Variable(np.float32(np.random.uniform(2850, 2890, 1))))
       self.dw.append(tf.Variable(np.float32(np.random.uniform(2, 20, 1))))
       self.Rm.append(tf.Variable(np.float32(1.0)))
     self.bg = tf.Variable(np.float32(0))

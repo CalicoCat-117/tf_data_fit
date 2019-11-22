@@ -1,0 +1,8 @@
+{
+	"learning rate" : 0.01,
+	"particle_num" : 1,
+	"X_scale" : 1000,
+	"EPOCHS" : 10,
+	"steps_per_epoch" : 500,
+	"train/test set split ratio" : 0.9
+}

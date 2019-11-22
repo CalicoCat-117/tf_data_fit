@@ -7,6 +7,10 @@ import pandas as pd
 import pdb
 import model
 from time import time
+import json
+
+with open("./config.json",'r') as load_f:
+  config = json.load(load_f)
 
 data_file = glob.glob("./data/*.txt") + glob.glob("./data/*.csv")
 
@@ -26,16 +30,16 @@ for file_name in data_file:
   X = df[0].values
   Y = df[1].values
   
-  X = X * 1000
+  X = X * config['X_scale']
   X = X.astype(np.float32)
   Y = Y / np.max(Y)
   Y = Y.astype(np.float32)
   ''' Build the model '''
-  particle_num = 1
+  particle_num = config['particle_num']
   fitmodel = model.Model(particle_num)
   
   ''' Train the model '''
-  optimizer = tf.keras.optimizers.Adam(lr=0.01)
+  optimizer = tf.keras.optimizers.Adam(lr=config['learning rate'])
   train_loss = tf.keras.metrics.Mean(name='train_loss')
   train_accuracy = tf.keras.metrics.Mean(name='train_accuracy')
   test_loss = tf.keras.metrics.Mean(name='test_loss')
@@ -60,15 +64,15 @@ for file_name in data_file:
     test_accuracy(Y, predictions)
     return
   
-  EPOCHS = 10
-  steps_per_epoch = 500
+  EPOCHS = config['EPOCHS']
+  steps_per_epoch = config['steps_per_epoch']
   for epoch in range(EPOCHS):
     # shuffle
     permutation = np.random.permutation(len(X))
     Xi = X[permutation]
     Yi = Y[permutation]
     # split
-    split_num = int(len(X) * 0.9)
+    split_num = int(len(X) * config['train/test set split ratio'])
     # Train
     X_train = Xi[:split_num]
     Y_train = Yi[:split_num]

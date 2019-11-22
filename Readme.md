@@ -21,6 +21,6 @@ python fit.py
 
 - [x] epoch to steps
 - [x] n particle model
-- [ ] simulation data
-- [ ] config file
+- [x] simulation data
+- [x] config file
 - [ ] heuristic algorithm
