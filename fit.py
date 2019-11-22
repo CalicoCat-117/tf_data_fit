@@ -10,6 +10,7 @@ from time import time
 
 data_file = glob.glob("./data/*.txt") + glob.glob("./data/*.csv")
 
+# data_file = glob.glob("./simulate/*.txt") + glob.glob("./simulate/*.csv")
 
 
 for file_name in data_file:
