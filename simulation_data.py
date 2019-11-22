@@ -15,10 +15,6 @@ def fake_data_generator(xs, model, var_scale, point_num):
   Y = model(X).numpy() + rand_noise
   return X, Y
 
-def save_csv():
-  return
-
-
 if __name__ == '__main__':
   xs = np.linspace(2800, 3200, 500)
   particle_num = 3
