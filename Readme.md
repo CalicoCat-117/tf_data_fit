@@ -16,11 +16,3 @@ python fit.py
 #### Result
 
 ![](./Figure_1.png)
-
-#### TODO
-
-- [x] epoch to steps
-- [x] n particle model
-- [x] simulation data
-- [x] config file
-- [ ] heuristic algorithm
